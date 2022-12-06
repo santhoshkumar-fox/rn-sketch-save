@@ -22,7 +22,6 @@ import type {
 } from './types';
 import { ImageFormat } from './types';
 import { STROKE_COLOR, STROKE_STYLE, STROKE_WIDTH } from './constants';
-import { useRef } from 'react';
 
 export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
   (
