@@ -7,6 +7,7 @@ import {
 } from '@shopify/react-native-skia';
 import React, {
   forwardRef,
+  useState,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -22,10 +23,12 @@ import type {
 } from './types';
 import { ImageFormat } from './types';
 import { STROKE_COLOR, STROKE_STYLE, STROKE_WIDTH } from './constants';
+import { useRef } from 'react';
 
 export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
   (
     {
+      draw,
       strokeWidth = STROKE_WIDTH,
       strokeColor = STROKE_COLOR,
       strokeStyle = STROKE_STYLE,
@@ -38,6 +41,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
   ) => {
     const pathsSnapshot = useSnapshot(derivedPaths);
     const canvasRef = useCanvasRef();
+    const drawtoggleRef = useRef<boolean>(true);
     const stack = useMemo(
       () =>
         createHistoryStack({
@@ -49,6 +53,7 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
 
     useEffect(() => {
       drawingState.currentPoints.width = strokeWidth;
+
     }, [strokeWidth]);
 
     useImperativeHandle(ref, () => ({
@@ -60,6 +65,13 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
           completedPoints: drawingState.completedPoints,
         });
       },
+      isDrawToggle(){
+        drawingState.isDrawing = true;
+      },
+      isZoomToggle(){
+        drawingState.isDrawing = false;
+      },
+      
       undo() {
         const value = stack.undo();
         drawingState.currentPoints = value.currentPoints;
@@ -108,22 +120,27 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
 
     const touchHandler = useTouchHandler(
       {
+        
         onStart: (touchInfo: TouchInfo) => {
+          // console.log("RN start")
+        console.log("Toggle",draw);
+        if(drawingState.isDrawing){
           drawingState.isDrawing = true;
           drawingState.currentPoints.points = [[touchInfo.x, touchInfo.y]];
+        }
         },
         onActive: (touchInfo: TouchInfo) => {
-          if (!drawingState.isDrawing) {
+         if(drawingState.isDrawing){ if (!drawingState.isDrawing) {
             return;
           }
-
           drawingState.currentPoints.points = [
             ...(drawingState.currentPoints.points ?? []),
             [touchInfo.x, touchInfo.y],
           ];
-        },
+        }},
         onEnd: (touchInfo: TouchInfo) => {
-          drawingState.isDrawing = false;
+         if(drawingState.isDrawing){ 
+          // drawingState.isDrawing = false;
 
           if (!drawingState.currentPoints.points) {
             return;
@@ -144,10 +161,10 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
           stack.push({
             currentPoints: drawingState.currentPoints,
             completedPoints: drawingState.completedPoints,
-          });
+          });}
         },
       },
-      [strokeColor, strokeStyle]
+      [strokeColor, strokeStyle,draw]
     );
 
     return (

@@ -21,6 +21,7 @@ export interface SketchCanvasRef {
 }
 
 export interface SketchCanvasProps {
+  draw?:boolean;
   strokeWidth?: number;
   strokeColor?: Color;
   strokeStyle?: 'stroke' | 'fill';
