@@ -7,7 +7,6 @@ import {
 } from '@shopify/react-native-skia';
 import React, {
   forwardRef,
-  useState,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -41,7 +40,6 @@ export const SketchCanvas = forwardRef<SketchCanvasRef, SketchCanvasProps>(
   ) => {
     const pathsSnapshot = useSnapshot(derivedPaths);
     const canvasRef = useCanvasRef();
-    const drawtoggleRef = useRef<boolean>(true);
     const stack = useMemo(
       () =>
         createHistoryStack({
