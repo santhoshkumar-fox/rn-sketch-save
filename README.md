@@ -1,4 +1,6 @@
-# rn-perfect-sketch-canvas
+# rn-sketch-save
+
+
 
 A React Native component for drawing perfect pressure-sensitive freehand lines using [perfect-freehand](https://github.com/steveruizok/perfect-freehand) and [Skia renderer](https://shopify.github.io/react-native-skia/).
 
@@ -29,6 +31,8 @@ export default function App() {
         containerStyle={styles.container}
       />
       <Button onPress={canvasRef.current?.reset} title="Reset" />
+      <Button onPress={canvaRef?.current?.isDrawToggle()} title="enableDraw" />
+      <Button onPress={canvaRef?.current?.isZoomToggle()} title="disableDraw" />
     </SafeAreaView>
   );
 }

@@ -1,6 +1,6 @@
 {
   "name": "rn-sketch-save",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "A React Native component for drawing perfect pressure-sensitive freehand lines for both iOS and Android.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
